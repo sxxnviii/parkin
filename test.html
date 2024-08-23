@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkinson's Disease Detection - Test</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        h1 {
+            color: #004d99;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+        input[type="text"],
+        input[type="number"] {
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .symptoms {
+            margin-top: 20px;
+        }
+        .symptoms label {
+            display: block;
+            margin-top: 8px;
+            font-size: 16px;
+        }
+        .symptoms input[type="range"] {
+            width: 100%;
+        }
+        button {
+            padding: 14px;
+            margin-top: 20px;
+            background-color: #004d99;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #003366;
+            transform: scale(1.05);
+        }
+        #result {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #e9ecef;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Parkinson's Disease Detection Test</h1>
+        <form id="detectionForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <div class="symptoms">
+                <p>Rate your symptoms (1-10):</p>
+                <label for="symptom1">Uneasyness in walking:</label>
+                <input type="range" id="symptom1" name="symptom1" min="1" max="10">
+
+                <label for="symptom2">Regular dizziness:</label>
+                <input type="range" id="symptom2" name="symptom2" min="1" max="10">
+
+                <label for="symptom3">Vomition:</label>
+                <input type="range" id="symptom3" name="symptom3" min="1" max="10">
+
+                <label for="symptom4">Random blacking out:</label>
+                <input type="range" id="symptom4" name="symptom4" min="1" max="10">
+
+                <label for="symptom5">Tremor in hands or fingers:</label>
+                <input type="range" id="symptom5" name="symptom5" min="1" max="10">
+
+                <label for="symptom6">Slow movement:</label>
+                <input type="range" id="symptom6" name="symptom6" min="1" max="10">
+
+                <label for="symptom7">Rigid muscles:</label>
+                <input type="range" id="symptom7" name="symptom7" min="1" max="10">
+
+                <label for="symptom8">Impaired posture and balance:</label>
+                <input type="range" id="symptom8" name="symptom8" min="1" max="10">
+
+                <label for="symptom9">Loss of automatic movements:</label>
+                <input type="range" id="symptom9" name="symptom9" min="1" max="10">
+
+                <label for="symptom10">Speech changes:</label>
+                <input type="range" id="symptom10" name="symptom10" min="1" max="10">
+            </div>
+
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        async function submitForm() {
+            const form = document.getElementById('detectionForm');
+            const formData = new FormData(form);
+
+            const data = {
+                name: formData.get('name'),
+                age: formData.get('age'),
+                symptoms: {
+                    symptom1: formData.get('symptom1'),
+                    symptom2: formData.get('symptom2'),
+                    symptom3: formData.get('symptom3'),
+                    symptom4: formData.get('symptom4'),
+                    symptom5: formData.get('symptom5'),
+                    symptom6: formData.get('symptom6'),
+                    symptom7: formData.get('symptom7'),
+                    symptom8: formData.get('symptom8'),
+                    symptom9: formData.get('symptom9'),
+                    symptom10: formData.get('symptom10')
+                }
+            };
+
+            const response = await fetch('http://127.0.0.1:5000/detect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = result.result;
+        }
+    </script>
+</body>
+</html>
